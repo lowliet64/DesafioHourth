@@ -1,6 +1,6 @@
 
 
-![Badge](https://img.shields.io/static/v1?label=DjangoRestFramework&message=v3.1.1.1&color=blue&style=<STYLE>&logo=ghost) 
+![Badge](https://img.shields.io/static/v1?label=DjangoRestFramework&message=v4.0.2&color=blue&style=<STYLE>&logo=ghost) 
 
 
 # Desafio Hourth
