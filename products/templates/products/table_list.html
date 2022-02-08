@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>Produtos</h1>
+    <table class="table" id="table">
+        <thead>
+            <tr>
+                <th scope="col">Produto</th>
+                <th scope="col">Data de inserção na loja</th>
+                <th scope="col">Total de vendas</th>
+                <th scope="col">colunas dinamicas</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css" />
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        fetch('http://localhost:8000/api/v1/products').then(result => {
+            result.json().then(res => {
+                console.log(res)
+                // mountTable(res.results)
+                $('#table').DataTable({
+                    "serverSide": true,
+                    "processing": true,
+                    "ajax": {
+                        "url": "api/v1/products/",
+                        "data": function (data) {
+                            console.log('executano')
+                            console.log(document.getElementsByName('table_length')[0].value)
+                            data.page_size = document.getElementsByName('table_length')[0].value;
+                            item = document.getElementsByClassName('current')[0];
+                            if (item != undefined) {
+                                data.page = item.innerHTML
+                            } else {
+                                data.page = 1
+                            }
+
+                        },
+
+                    },
+
+                    "columns": [
+                        { "data": "product_url" },
+                        { "data": "product_url_created_at" },
+                        { "data": "c" },
+
+                    ]
+                });
+
+            })
+
+
+        })
+
+    });
+
+    function mountTable(data) {
+        data.forEach(element => {
+
+            table = document.getElementById('table-body')
+            row = document.createElement('tr')
+            produtoUrl = document.createElement('td')
+            productUrlCreatedAt = document.createElement('td')
+            dynamic = document.createElement('td')
+            cVendas = document.createElement('td')
+
+            produtoUrl.innerHTML = element.product_url
+            productUrlCreatedAt.innerHTML = element.product_url_created_at
+            cVendas.innerHTML = element.c
+
+            row.appendChild(produtoUrl)
+            row.appendChild(productUrlCreatedAt)
+            row.appendChild(cVendas)
+
+            table.appendChild(row)
+
+        });
+    }
+</script>
+
+</html>
